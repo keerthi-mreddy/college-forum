@@ -1,6 +1,5 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import WelcomePage from "./pages/Welcome Page/WelcomePage";
 import { Login } from "./pages/Login and Signup/Login";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +7,7 @@ import { Register } from "./pages/Login and Signup/Register";
 import { Error } from "./pages/Error/Error";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import Homepage from "./pages/Home Page/Homepage";
 
 function App() {
 	const dispatcher = useDispatch();
@@ -15,12 +15,12 @@ function App() {
 	const userLoggedIn = useSelector((state) => state.userLoggedIn);
 	const userDetails = useSelector((state) => state.userDetails);
 
-	useEffect(() => {
-		console.log(userLoggedIn);
-		if (userLoggedIn === false) {
-			navigate("/login");
-		}
-	}, []);
+	// useEffect(() => {
+	// 	console.log(userLoggedIn);
+	// 	if (userLoggedIn === false) {
+	// 		navigate("/login");
+	// 	}
+	// }, []);
 
 	const navigate = useNavigate();
 
@@ -70,7 +70,7 @@ function App() {
 
 	return (
 		<Routes>
-			<Route path="/" element={<WelcomePage />} exact />
+			<Route path="/" element={<Homepage />} exact />
 			<Route
 				path="/login"
 				element={<Login onLogin={loginHandler} />}

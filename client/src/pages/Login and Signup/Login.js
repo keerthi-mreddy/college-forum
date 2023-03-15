@@ -12,6 +12,10 @@ import {
 } from "@mantine/core";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { Navbar } from "../../components/Navbar/Navbar";
+// import { Navbar } from "../../components/Navbar/Navbar";
+
+
 
 const useStyles = createStyles((theme) => ({
 	wrapper: {
@@ -76,47 +80,50 @@ export function Login(props) {
 	};
 
 	return (
-		<div className={classes.wrapper}>
-			<Paper className={classes.form} radius={0} p={30}>
-				<Title
-					order={2}
-					className={classes.title}
-					ta="center"
-					mt="md"
-					mb={50}>
-					Welcome back to Student Forum!
-				</Title>
+		<>
+			<div className={classes.wrapper}>
+			<Navbar />
+				<Paper className={classes.form} radius={0} p={30}>
+					<Title
+						order={2}
+						className={classes.title}
+						ta="center"
+						mt="md"
+						mb={50}>
+						Welcome back to Student Forum!
+					</Title>
 
-				<TextInput
-					label="Email address"
-					placeholder="hello@gmail.com"
-					size="md"
-					value="rohithboppey1298@gmail.com"
-					ref={useremailRef}
-				/>
-				<PasswordInput
-					label="Password"
-					placeholder="Your password"
-					mt="md"
-					value="20oct2002"
-					ref={passwordRef}
-					size="md"
-				/>
-				<Checkbox label="Keep me logged in" mt="xl" size="md" />
-				<Button fullWidth mt="xl" size="md" onClick={onRegister}>
-					Login
-				</Button>
+					<TextInput
+						label="Email address"
+						placeholder="hello@gmail.com"
+						size="md"
+						value="r1298@gmail.com"
+						ref={useremailRef}
+					/>
+					<PasswordInput
+						label="Password"
+						placeholder="Your password"
+						mt="md"
+						value="20oct2002"
+						ref={passwordRef}
+						size="md"
+					/>
+					<Checkbox label="Keep me logged in" mt="xl" size="md" />
+					<Button fullWidth mt="xl" size="md" onClick={onRegister}>
+						Login
+					</Button>
 
-				<Text ta="center" mt="md">
-					Don&apos;t have an account?{" "}
-					<Anchor
-						href="#"
-						weight={700}
-						onClick={() => navigate("/register")}>
-						Register
-					</Anchor>
-				</Text>
-			</Paper>
-		</div>
+					<Text ta="center" mt="md">
+						Don&apos;t have an account?{" "}
+						<Anchor
+							href="#"
+							weight={700}
+							onClick={() => navigate("/register")}>
+							Register
+						</Anchor>
+					</Text>
+				</Paper>
+			</div>
+		</>
 	);
 }
