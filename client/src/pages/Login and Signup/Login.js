@@ -97,14 +97,14 @@ export function Login(props) {
 						label="Email address"
 						placeholder="hello@gmail.com"
 						size="md"
-						value="r1298@gmail.com"
+						value="hello@gmail.com"
 						ref={useremailRef}
 					/>
 					<PasswordInput
 						label="Password"
 						placeholder="Your password"
 						mt="md"
-						value="20oct2002"
+						value="RBmantine@20"
 						ref={passwordRef}
 						size="md"
 					/>

@@ -68,7 +68,7 @@ app.post("/users/login", async (req, res) => {
 });
 
 app.post("/users/register", async (req, res) => {
-	const user = await User.findOne({
+	let user = await User.findOne({
 		email: req.body.email,
 		password: req.body.password,
 	});
@@ -88,13 +88,12 @@ app.post("/users/register", async (req, res) => {
 			section: req.body.section,
 		});
 		newUser.save();
-		res.send(newUser);
+		user = newUser;
 	} else {
-		res.send(
-			"You have already previously registered! Please login using the same email."
-		);
-		res.send(user);
+		user =
+			"You have already previously registered! Please login using the same email.";
 	}
+	res.send(user);
 });
 
 app.put("/users/:id", async (req, res) => {

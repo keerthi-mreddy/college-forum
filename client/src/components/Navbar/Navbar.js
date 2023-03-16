@@ -29,6 +29,7 @@ import {
 	IconCoin,
 	IconChevronDown,
 } from "@tabler/icons-react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
@@ -136,6 +137,9 @@ const mockdata = [
 ];
 
 export function Navbar() {
+	const userLoggedIn = useSelector((state) => state.userLoggedIn);
+	const userDetails = useSelector((state) => state.userDetails);
+
 	const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
 		useDisclosure(false);
 	const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
@@ -169,67 +173,37 @@ export function Navbar() {
 						sx={{ height: "100%" }}
 						spacing={0}
 						className={classes.hiddenMobile}>
-						<a href="#" className={classes.link}>
+						<div
+							className={classes.link}
+							onClick={() => navigate("/")}>
 							Home
-						</a>
-						<HoverCard
-							width={600}
-							position="bottom"
-							radius="md"
-							shadow="md"
-							withinPortal>
-							{/* <HoverCard.Target>
-								<a href="#" className={classes.link}>
-									<Center inline>
-										<Box component="span" mr={5}>
-											Features
-										</Box>
-										<IconChevronDown
-											size={16}
-											color={theme.fn.primaryColor()}
-										/>
-									</Center>
-								</a>
-							</HoverCard.Target> */}
-
-							<HoverCard.Dropdown sx={{ overflow: "hidden" }}>
-								<Group position="apart" px="md">
-									<Text fw={500}>Features</Text>
-								</Group>
-
-								<Divider
-									my="sm"
-									mx="-md"
-									color={
-										theme.colorScheme === "dark"
-											? "dark.5"
-											: "gray.1"
-									}
-								/>
-
-								<SimpleGrid cols={2} spacing={0}>
-									{links}
-								</SimpleGrid>
-							</HoverCard.Dropdown>
-						</HoverCard>
-						<a href="#" className={classes.link}>
-							Learn
-						</a>
-						<a href="#" className={classes.link}>
-							Academy
-						</a>
+						</div>
+						
+						<div
+							className={classes.link}
+							onClick={() => navigate("/questions")}>
+							Q & A
+						</div>
 					</Group>
 
-					<Group className={classes.hiddenMobile}>
-						<Button
-							variant="default"
-							onClick={() => navigate("/login")}>
-							Log in
-						</Button>
-						<Button onClick={() => navigate("/register")}>
-							Sign up
-						</Button>
-					</Group>
+					{!userLoggedIn ? (
+						<Group className={classes.hiddenMobile}>
+							<Button
+								variant="default"
+								onClick={() => navigate("/login")}>
+								Log in
+							</Button>
+							<Button onClick={() => navigate("/register")}>
+								Sign up
+							</Button>
+						</Group>
+					) : (
+						<div
+							className={classes.link}
+							onClick={() => navigate("/user-profile")}>
+							{userDetails.fullname}
+						</div>
+					)}
 
 					<Burger
 						opened={drawerOpened}
@@ -258,7 +232,7 @@ export function Navbar() {
 					<a href="#" className={classes.link}>
 						Home
 					</a>
-					{/* <UnstyledButton
+					<UnstyledButton
 						className={classes.link}
 						onClick={toggleLinks}>
 						<Center inline>
@@ -270,14 +244,26 @@ export function Navbar() {
 								color={theme.fn.primaryColor()}
 							/>
 						</Center>
-					</UnstyledButton> */}
+					</UnstyledButton>
 					<Collapse in={linksOpened}>{links}</Collapse>
-					<a href="#" className={classes.link}>
-						Learn
-					</a>
-					<a href="#" className={classes.link}>
-						Academy
-					</a>
+					{!userLoggedIn ? (
+						<>
+							<Button
+								variant="default"
+								onClick={() => navigate("/login")}>
+								Log in
+							</Button>
+							<Button onClick={() => navigate("/register")}>
+								Sign up
+							</Button>
+						</>
+					) : (
+						<div
+							className={classes.link}
+							onClick={() => navigate("/user-profile")}>
+							{userDetails.fullname}
+						</div>
+					)}
 
 					<Divider
 						my="sm"

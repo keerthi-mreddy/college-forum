@@ -20,14 +20,30 @@ import {
 	IconReport,
 	IconCashBanknote,
 	IconCoin,
-	IconQuestionMark
+	IconQuestionMark,
 } from "@tabler/icons-react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const mockdata = [
-	{ title: "Ask or browse the questions", icon: IconQuestionMark, color: "red" },
-	{ title: "Visit the College Website", icon: IconBuildingCommunity, color: "indigo" },
-	{ title: "Show your Time Table", icon: IconCalendarTime, color: "teal" },
-	{ title: "Recent Announcements", icon: IconTimeline, color: "pink" },
+	{
+		title: "Ask or browse the questions",
+		icon: IconQuestionMark,
+		color: "red",
+		link: "/questions",
+	},
+	{
+		title: "Show your Time Table",
+		icon: IconCalendarTime,
+		color: "teal",
+		link: "/timetable",
+	},
+	{
+		title: "Recent Announcements",
+		icon: IconTimeline,
+		color: "pink",
+		link: "/announcements",
+	},
 	{ title: "Receipts", icon: IconReceipt, color: "teal" },
 	{ title: "Taxes", icon: IconReceiptTax, color: "cyan" },
 	{ title: "Reports", icon: IconReport, color: "pink" },
@@ -69,9 +85,13 @@ const useStyles = createStyles((theme) => ({
 
 export function AllServices() {
 	const { classes, theme } = useStyles();
+	const navigate = useNavigate();
 
 	const items = mockdata.map((item) => (
-		<UnstyledButton key={item.title} className={classes.item}>
+		<UnstyledButton
+			key={item.title}
+			className={classes.item}
+			onClick={() => navigate(`${item.link}`)}>
 			<item.icon color={theme.colors[item.color][6]} size="2rem" />
 			<Text size="xs" mt={7}>
 				{item.title}
