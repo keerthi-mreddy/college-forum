@@ -1,7 +1,7 @@
-import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import React from "react";
 
-const Demo = (props) => {
+const QuestionEditor = (props) => {
 	return (
 		<div>
 			<Editor
@@ -21,10 +21,9 @@ const Demo = (props) => {
 					// console.log(e.target.getContent());
 					props.onEdit(e.target.getContent());
 				}}
-				
 			/>
 		</div>
 	);
 };
 
-export default Demo;
+export default QuestionEditor;

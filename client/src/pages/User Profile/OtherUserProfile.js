@@ -1,25 +1,31 @@
-import { Button, Dialog, Text } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { Navbar } from "../../components/Navbar/Navbar";
 
-import "./userprofile.css";
+import Axios from "axios";
 
-const UserProfile = (props) => {
+import "./userprofile.css";
+import { useNavigate, useParams } from "react-router-dom";
+
+const OtherUserProfile = () => {
 	// console.log(props)
 	const userDetails = useSelector((state) => state.userDetails);
-	const userLoggedIn = useSelector((state) => state.userLoggedIn);
-	const [opened, { toggle, close }] = useDisclosure(false);
-
 	const navigate = useNavigate();
 
+	const { id } = useParams();
+
 	useEffect(() => {
-		if (!userLoggedIn) {
-			navigate("/login");
-		}
-	}, []);
+		const getUserDetails = async () => {
+			const response = await Axios.get(
+				`http://localhost:5000/users/${id}`
+			);
+			console.log(response.data);
+			if (response.data.length === 0) {
+				navigate("/error");
+			}
+		};
+		getUserDetails();
+	});
 
 	return (
 		<div>
@@ -27,13 +33,14 @@ const UserProfile = (props) => {
 			<div class="container-up middle">
 				<div class="outer">
 					<div
-						id="userprofilepage"
+						id="OtherUserProfilepage"
 						class="profile-nav col-md-14 middle">
 						<div class="panel">
 							<div class="container-up user-heading round">
 								<h1 style={{ fontSize: 28 }}>
 									<br />
-									Hello {userDetails.fullname}
+									You are viewing{" "}
+									<i>{userDetails.fullname}</i>'s profile
 								</h1>
 								<p>
 									<b>Your Unique User ID: </b> &nbsp;&nbsp;{" "}
@@ -43,9 +50,6 @@ const UserProfile = (props) => {
 						</div>
 
 						<div>
-							<h1 style={{ textAlign: "center", fontSize: 50 }}>
-								<b>User details</b>
-							</h1>
 							<div class="row">
 								<table
 									className="table-m"
@@ -84,38 +88,7 @@ const UserProfile = (props) => {
 										</td>
 									</tr>
 								</table>
-								<div style={{ textAlign: "center" }}>
-									<br />
-									{/* <Button onClick = {() => alert('Currently, updating is only possible')}>Update Profile</Button> */}
-									<Button onClick={toggle}>
-										Update Profile
-									</Button>
-									<br />
-									<br />
-									<Button onClick={props.onLogout}>
-										Logout
-									</Button>
-								</div>
 							</div>
-							<Dialog
-								opened={opened}
-								withCloseButton
-								onClose={close}
-								size="lg"
-								position={{ top: 20, right: 20 }}
-								radius="md">
-								<Text size="sm" weight={500}>
-									Sorry, updating your profile currently only
-									happens through contacting{" "}
-									<i>
-										<u>
-											<a href="#">
-												admin@grietportal.com
-											</a>
-										</u>
-									</i>
-								</Text>
-							</Dialog>
 						</div>
 					</div>
 				</div>
@@ -133,4 +106,4 @@ const UserProfile = (props) => {
 	);
 };
 
-export default UserProfile;
+export default OtherUserProfile;

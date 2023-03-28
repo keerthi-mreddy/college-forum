@@ -1,0 +1,12 @@
+question -
+    question title,
+    brief desc about question,
+    asked by
+    on time
+    id
+
+answer -
+    question id,
+    number of upvotes and by what user,
+    number of comments,
+    answer id,
