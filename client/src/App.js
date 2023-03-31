@@ -120,6 +120,7 @@ function App() {
 			/>
 
 			<Route path="/questions" element={<Questions />} exact />
+			
 			<Route
 				path="/question/:id"
 				element={<IndividualQuestion />}

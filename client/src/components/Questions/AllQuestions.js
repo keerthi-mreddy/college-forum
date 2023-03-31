@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import Axios from "axios";
 import QuestionModal from "./QuestionModal";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const useStyles = createStyles((theme) => ({
 	wrapper: {
@@ -101,15 +102,19 @@ export default function AllQuestions() {
 	const [questions, setQuestions] = useState([]);
 	const [completeQuestions, setCompleteQuestions] = useState([]);
 
+	const userLoggedIn = useSelector((state) => state.userLoggedIn);
+
 	useEffect(() => {
 		const getQuestions = async () => {
+			if (!userLoggedIn) {
+				// alert("Please login first");
+				navigate("/");
+			}
 			const responses = await Axios.get(
 				"http://localhost:5000/questions/all"
 			);
+
 			const data = responses.data;
-			data.sort((a, b) => {
-				return a.createdAt - b.createdAt;
-			});
 			console.log(data);
 			setQuestions(data);
 			setCompleteQuestions(data);

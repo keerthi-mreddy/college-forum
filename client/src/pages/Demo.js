@@ -1,30 +1,54 @@
-import React from "react";
-import { Editor } from "@tinymce/tinymce-react";
+import { Tabs } from "@mantine/core";
+import {
+	IconPhoto,
+	IconMessageCircle,
+	IconSettings,
+} from "@tabler/icons-react";
 
-const Demo = (props) => {
+import { Spoiler } from "@mantine/core";
+
+export default function Demo() {
 	return (
-		<div>
-			<Editor
-				// apiKey="y7gnmtbsaxnjbgh3405ioqbdm24eit5f0ovek49w8yvq5r9q"
-				initialValue=""
-				init={{
-					branding: false,
-					height: 400,
-					menubar: true,
-					plugins:
-						"print preview paste searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern",
-					toolbar:
-						"formatselect | bold italic underline strikethrough | forecolor backcolor blockquote | link image media | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat",
-					image_advtab: true,
-				}}
-				onChange={(e) => {
-					// console.log(e.target.getContent());
-					props.onEdit(e.target.getContent());
-				}}
-				
-			/>
-		</div>
-	);
-};
+		<Tabs orientation="horizontal" defaultValue="gallery">
+			<Tabs.List>
+				<Tabs.Tab value="gallery" icon={<IconPhoto size="0.8rem" />}>
+					Gallery
+				</Tabs.Tab>
+				<Tabs.Tab
+					value="messages"
+					icon={<IconMessageCircle size="0.8rem" />}>
+					Messages
+				</Tabs.Tab>
+				<Tabs.Tab
+					value="settings"
+					icon={<IconSettings size="0.8rem" />}>
+					Settings
+				</Tabs.Tab>
+			</Tabs.List>
 
-export default Demo;
+			<Tabs.Panel value="gallery" pl="xs">
+				<Spoiler maxHeight={40} showLabel="Show more" hideLabel="Hide">
+					We Butter the Bread with Butter was founded in 2007 by
+					Marcel Neumann, who was originally guitarist for Martin
+					Kesici's band, and Tobias Schultka. The band was originally
+					meant as a joke, but progressed into being a more serious
+					musical duo. The name for the band has no particular
+					meaning, although its origins were suggested from when the
+					two original members were driving in a car operated by
+					Marcel Neumann and an accident almost occurred. Neumann
+					found Schultka "so funny that he briefly lost control of the
+					vehicle." Many of their songs from this point were covers of
+					German folk tales and nursery rhymes.
+				</Spoiler>
+			</Tabs.Panel>
+
+			<Tabs.Panel value="messages" pl="xs">
+				Messages tab content
+			</Tabs.Panel>
+
+			<Tabs.Panel value="settings" pl="xs">
+				Settings tab content
+			</Tabs.Panel>
+		</Tabs>
+	);
+}

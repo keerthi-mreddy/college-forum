@@ -27,7 +27,7 @@ const QuestionModalContent = () => {
 			}
 		);
 		alert('Question Added');
-		navigate('/questions');
+		window.location.reload();
 	};
 
 	return (

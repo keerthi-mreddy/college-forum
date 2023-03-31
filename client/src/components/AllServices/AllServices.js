@@ -22,7 +22,6 @@ import {
 	IconCoin,
 	IconQuestionMark,
 } from "@tabler/icons-react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const mockdata = [

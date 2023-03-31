@@ -4,6 +4,35 @@ const Schema = mongoose.Schema;
 
 const ObjectId = Schema.Types.ObjectId;
 
+const CommentSchema = new mongoose.Schema({
+	given_by: { type: ObjectId, ref: "users" },
+	comment: String,
+	createdAt: {
+		type: Date,
+		default: Date.now,
+	},
+});
+
+const AnswerSchema = new mongoose.Schema({
+	given_by: {
+		type: ObjectId,
+		ref: "users",
+	},
+	answer: {
+		type: String,
+	},
+	upvoted_by: {
+		type: Array,
+	},
+	comments: {
+		type: [{ type: Schema.Types.ObjectId, ref: "comments" }],
+	},
+	createdAt: {
+		type: Date,
+		default: Date.now,
+	},
+});
+
 const QuestionSchema = new mongoose.Schema({
 	title: String,
 	description: String,
@@ -13,9 +42,11 @@ const QuestionSchema = new mongoose.Schema({
 		type: Date,
 		default: Date.now,
 	},
-    answers: [{type: ObjectId, ref: "answers"}]
+	answers: [{ type: ObjectId, ref: "answers" }],
 });
 
+var Comment = mongoose.model("comments", CommentSchema);
+var Answer = mongoose.model("answers", AnswerSchema);
 var Question = mongoose.model("questions", QuestionSchema);
 
-module.exports = Question;
+module.exports = { Question, Answer, Comment };
