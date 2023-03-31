@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import QuestionEditor from "../Editor/QuestionEditor";
-import { Button, Container, Spoiler, Tabs, Text } from "@mantine/core";
+import { Button, Center, Container, Spoiler, Tabs, Text } from "@mantine/core";
 import { Markup } from "react-render-markup";
 import { IconBallpen, IconMessage } from "@tabler/icons-react";
 
@@ -9,8 +9,15 @@ import Axios from "axios";
 const QuestionDescription = (props) => {
 	const [answer, setAnswer] = useState();
 
-	const submitHandler = () => {
+	const submitHandler = async () => {
 		console.log(answer);
+		await Axios.post("http://localhost:5000/questions/new-answer", {
+			questionId: props.questionDetails._id,
+			given_by: props.questionDetails.given_by,
+			answer: answer,
+		});
+		alert("Your answer has been added successfully!");
+		window.location.reload();
 	};
 
 	return (
@@ -49,21 +56,71 @@ const QuestionDescription = (props) => {
 					<Tabs.Panel value="View answers" pl="xs">
 						{props.allAnswers.length !== 0 ? (
 							<>
-								{props.allAnswers.map((answer) => {
-									return (
-										<Container align="center" pb={80}>
+								<Container pb={80}>
+									{props.allAnswers.map((answer) => {
+										return (
 											<Spoiler
-												maxHeight={40}
+												mt={30}
+												mb={30}
+												sx={(theme) => ({
+													backgroundColor:
+														theme.colorScheme ===
+														"dark"
+															? theme.colors
+																	.dark[6]
+															: theme.colors
+																	.gray[0],
+													padding: theme.spacing.xl,
+													borderRadius:
+														theme.radius.md,
+													cursor: "pointer",
+
+													"&:hover": {
+														backgroundColor:
+															theme.colorScheme ===
+															"dark"
+																? theme.colors
+																		.dark[5]
+																: theme.colors
+																		.gray[1],
+													},
+												})}
+												maxHeight={80}
 												showLabel="Show more"
 												hideLabel="Hide">
-												{answer.answer}
+												<Markup
+													markup={answer.answer}
+												/>
 											</Spoiler>
-										</Container>
-									);
-								})}
+										);
+									})}
+								</Container>
 							</>
 						) : (
-							<></>
+							<Center
+								size="100%"
+								h={400}
+								mt={30}
+								mb={90}
+								align="center"
+								sx={(theme) => ({
+									backgroundColor:
+										theme.colorScheme === "dark"
+											? theme.colors.dark[6]
+											: theme.colors.gray[0],
+									padding: theme.spacing.xl,
+									borderRadius: theme.radius.md,
+									cursor: "pointer",
+
+									"&:hover": {
+										backgroundColor:
+											theme.colorScheme === "dark"
+												? theme.colors.dark[5]
+												: theme.colors.gray[1],
+									},
+								})}>
+								No answers found, please add!
+							</Center>
 						)}
 					</Tabs.Panel>
 

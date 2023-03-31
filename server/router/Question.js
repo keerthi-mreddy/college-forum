@@ -55,8 +55,8 @@ question_router.post("/get-answers", async (req, res) => {
 });
 
 question_router.post("/new-answer", async (req, res) => {
-	const questionId = req.body.questionId;
-	const { given_by, answer } = req.body;
+	console.log(req.body);
+	const { questionId, given_by, answer } = req.body;
 	const newAnswer = new Answer({
 		given_by: given_by,
 		answer: answer,
