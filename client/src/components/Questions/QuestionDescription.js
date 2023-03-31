@@ -5,16 +5,23 @@ import { Markup } from "react-render-markup";
 import { IconBallpen, IconMessage } from "@tabler/icons-react";
 
 import Axios from "axios";
+import { useSelector } from "react-redux";
 
 const QuestionDescription = (props) => {
 	const [answer, setAnswer] = useState();
-
+	const userDetails = useSelector((state) => state.userDetails);
+	console.log(props)
 	const submitHandler = async () => {
-		console.log(answer);
+		console.log(userDetails);
+		if(answer.length === 0) {
+			alert('Please enter a valid answer');
+			return;
+		}
 		await Axios.post("http://localhost:5000/questions/new-answer", {
 			questionId: props.questionDetails._id,
-			given_by: props.questionDetails.given_by,
+			given_by: userDetails._id,
 			answer: answer,
+			author: props.questionDetails.author
 		});
 		alert("Your answer has been added successfully!");
 		window.location.reload();
@@ -24,7 +31,7 @@ const QuestionDescription = (props) => {
 		<div>
 			{/* Here question details */}
 			<Container size="lg">
-				<Text size={70}>{props.questionDetails.title}</Text>
+				<Text size={55}>{props.questionDetails.title}</Text>
 				<Markup markup={props.questionDetails.description} />
 				{/* {question.description} */}
 				<Text c="dimmed" pt="sm">
@@ -91,6 +98,20 @@ const QuestionDescription = (props) => {
 												<Markup
 													markup={answer.answer}
 												/>
+												<div>
+													<u>Answered by:</u> &nbsp;
+													<a
+														href={`../user/${answer.given_by}`}>
+														{
+															answer.author
+														}
+													</a>{" "}
+													on{" "}
+													{
+														answer
+															.createdAt
+													}{" "}
+												</div>
 											</Spoiler>
 										);
 									})}

@@ -11,6 +11,7 @@ const CommentSchema = new mongoose.Schema({
 		type: Date,
 		default: Date.now,
 	},
+	author: String,
 });
 
 const AnswerSchema = new mongoose.Schema({
@@ -21,6 +22,7 @@ const AnswerSchema = new mongoose.Schema({
 	answer: {
 		type: String,
 	},
+	author: String,
 	upvoted_by: {
 		type: Array,
 	},
