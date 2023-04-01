@@ -45,9 +45,11 @@ question_router.post("/new-question", async (req, res) => {
 question_router.post("/get-answers", async (req, res) => {
 	const questionId = req.body.questionId;
 	console.log(questionId);
-	const allQuestionAnswers = await Question.find({ _id: questionId }).populate("answers");
+	const allQuestionAnswers = await Question.find({
+		_id: questionId,
+	}).populate("answers");
 	let allAnswers = [];
-	if(allQuestionAnswers.length !== 0){
+	if (allQuestionAnswers.length !== 0) {
 		console.log(allQuestionAnswers[0].answers);
 		allAnswers = allQuestionAnswers[0].answers;
 	}
@@ -74,6 +76,33 @@ question_router.post("/new-answer", async (req, res) => {
 	);
 	console.log("Answer Added");
 	res.json(newAnswer);
+});
+
+question_router.post("/get-comments", async (req, res) => {
+	const { answerId } = req.body;
+	const allComments = await Answer.find({ _id: answerId }).populate(
+		"comments"
+	);
+	res.json(allComments);
+});
+
+question_router.post("/new-comment", async (req, res) => {
+	const { answerId, author, comment, given_by } = req.body;
+	const addedComment = new Comment({
+		author, comment, given_by
+	});
+	await addedComment.save();
+	const allComments = await Answer.find({ _id: answerId });
+	let result = "";
+	if (allComments.length > 0) {
+		const updatedComments = [...allComments[0].comments, addedComment._id];
+		console.log(updatedComments);
+		result = await Answer.findOneAndUpdate(
+			{ _id: answerId },
+			{ comments: updatedComments }
+		);
+	}
+	res.json(result);
 });
 
 module.exports = question_router;

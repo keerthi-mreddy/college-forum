@@ -14,6 +14,7 @@ import Timetable from "./pages/Timetable/Timetable";
 import { useEffect } from "react";
 import OtherUserProfile from "./pages/User Profile/OtherUserProfile";
 import IndividualQuestion from "./pages/Questions/IndividualQuestion";
+import AnswerPage from "./pages/Answer/AnswerPage";
 
 function App() {
 	const dispatcher = useDispatch();
@@ -125,7 +126,12 @@ function App() {
 				path="/question/:id"
 				element={<IndividualQuestion />}
 				exact
-			/>		
+			/>	
+			<Route
+				path="/answer/:id"
+				element={<AnswerPage />}
+				exact
+			/>	
 			<Route
 				path="/college-website"
 				component={() => {

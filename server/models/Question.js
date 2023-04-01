@@ -6,12 +6,12 @@ const ObjectId = Schema.Types.ObjectId;
 
 const CommentSchema = new mongoose.Schema({
 	given_by: { type: ObjectId, ref: "users" },
+	author: String,
 	comment: String,
 	createdAt: {
 		type: Date,
 		default: Date.now,
 	},
-	author: String,
 });
 
 const AnswerSchema = new mongoose.Schema({

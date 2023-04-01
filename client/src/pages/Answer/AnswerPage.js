@@ -1,31 +1,51 @@
-import React, { useState } from "react";
-import QuestionEditor from "../Editor/QuestionEditor";
+import React, { useEffect, useState } from "react";
 import { Button, Center, Container, Spoiler, Tabs, Text } from "@mantine/core";
 import { Markup } from "react-render-markup";
 import { IconBallpen, IconMessage } from "@tabler/icons-react";
 
 import Axios from "axios";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import QuestionEditor from "../../components/Editor/QuestionEditor";
+import { Navbar } from "../../components/Navbar/Navbar";
 
-const QuestionDescription = (props) => {
+const AnswerPage = (props) => {
 	const navigate = useNavigate();
 
-	const [answer, setAnswer] = useState();
+	const [questionDetails, setQuestionDetails] = useState({});
+	const [answerDetails, setAnswerDetails] = useState({});
+	const [allComments, setAllComments] = useState([]);
+	const [comment, setComment] = useState("");
+
+	const Location = useLocation();
+
+	useEffect(() => {
+		setQuestionDetails(Location.state.questionDetails);
+		setAnswerDetails(Location.state.answerDetails);
+		const getAllComments = async () => {
+			const response = await Axios.post(
+				"http://localhost:5000/questions/get-comments",
+				{
+					answerId: Location.state.answerDetails._id,
+				}
+			);
+			console.log(response.data);
+			if (response.data.length > 0) {
+				setAllComments(response.data[0].comments);
+			}
+		};
+		getAllComments();
+	}, []);
+
 	const userDetails = useSelector((state) => state.userDetails);
 	// console.log(props);
 	const submitHandler = async () => {
-		// console.log(userDetails);
-		console.log(answer);
-		if (answer === undefined || answer === null || answer.length === 0) {
-			alert("Please enter a valid answer");
-			return;
-		}
-		await Axios.post("http://localhost:5000/questions/new-answer", {
-			questionId: props.questionDetails._id,
-			given_by: userDetails._id,
-			answer: answer,
+		console.log(comment);
+		await Axios.post("http://localhost:5000/questions/new-comment", {
+			answerId: answerDetails._id,
 			author: userDetails.fullname,
+			comment: comment,
+			given_by: userDetails._id,
 		});
 		alert("Your answer has been added successfully!");
 		window.location.reload();
@@ -33,44 +53,56 @@ const QuestionDescription = (props) => {
 
 	return (
 		<div>
-			{/* Here question details */}
+			<Navbar />
 			<Container size="lg">
-				<Text size={55}>{props.questionDetails.title}</Text>
-				<Markup markup={props.questionDetails.description} />
-				<Text fw={500} pt="sm">
+				<Text size={55}>{questionDetails.title}</Text>
+				<Text fw={500} fz="lg" pt="sm">
 					<u>Asked by:</u> &nbsp;
-					<a href={`../user/${props.questionDetails.asked_by}`}>
-						{props.questionDetails.author}
+					<a href={`../user/${questionDetails.asked_by}`}>
+						{questionDetails.author}
 					</a>{" "}
-					on {props.questionDetails.createdAt}{" "}
+					on {questionDetails.createdAt}{" "}
 				</Text>
-
+				<Markup markup={questionDetails.description} />
+				<Text fw={500} fz="xl" pt="sm">
+					<a href={`../user/${questionDetails.asked_by}`}>
+						{questionDetails.author}
+					</a>{" "}
+					have answered saying:
+				</Text>
+				<Container size="md">
+					<Markup markup={answerDetails.answer} />
+				</Container>
 				<Tabs
 					orientation="horizontal"
-					defaultValue="View answers"
+					defaultValue="View comments"
 					pt={30}>
 					<Tabs.List grow>
 						<Tabs.Tab
-							value="View answers"
+							value="View comments"
 							icon={<IconMessage size="1.2rem" />}>
 							{" "}
-							<Text size={20}>View answers</Text>
+							<Text size={20}>View comments</Text>
 						</Tabs.Tab>
 						<Tabs.Tab
-							value="Answer this question"
+							value="Add a new comment"
 							icon={<IconBallpen size="1.2rem" />}>
-							<Text size={20}>Answer this question</Text>
+							<Text size={20}>Add a new comment</Text>
 						</Tabs.Tab>
 					</Tabs.List>
 
-					<Tabs.Panel value="View answers" pl="xs">
-						{props.allAnswers.length !== 0 ? (
+					<Tabs.Panel value="View comments" pl="xs">
+						{allComments.length !== 0 ? (
 							<>
-								<Container pb={80}>
-									{props.allAnswers.map((answer) => {
+								<Container
+									pb={80}
+									style={{
+										backgroundColor: "rgba(255, 255, 255)",
+									}}>
+									{allComments.map((comment) => {
 										return (
 											<Spoiler
-												key={answer._id}
+												key={comment._id}
 												mt={30}
 												mb={30}
 												sx={(theme) => ({
@@ -100,39 +132,23 @@ const QuestionDescription = (props) => {
 												showLabel="Show more"
 												hideLabel="Hide">
 												<Markup
-													markup={answer.answer}
+													markup={comment.comment}
 												/>
+												<br /> <br />
 												<div
 													style={{
 														marginBottom: 20,
 													}}>
-													<u>Answered by:</u> &nbsp;
+													<u>Commented by:</u> &nbsp;
 													<a
-														href={`../user/${answer.given_by}`}>
-														{answer.author}
+														href={`../user/${comment.given_by}`}>
+														{comment.author}
 													</a>{" "}
-													on {answer.createdAt} <br />
+													on {comment.createdAt}{" "}
+													<br />
 													<Container
-														size="100%"
-														align="center">
-														<Button
-															mt={20}
-															onClick={() => {
-																navigate(
-																	`../answer/${answer._id}`,
-																	{
-																		state: {
-																			questionDetails:
-																				props.questionDetails,
-																			answerDetails:
-																				answer,
-																		},
-																	}
-																);
-															}}>
-															Open answer
-														</Button>
-													</Container>
+														size="100"
+														align="center"></Container>
 												</div>
 											</Spoiler>
 										);
@@ -142,7 +158,7 @@ const QuestionDescription = (props) => {
 						) : (
 							<Center
 								size="100%"
-								h={400}
+								h={200}
 								mt={30}
 								mb={90}
 								align="center"
@@ -162,17 +178,17 @@ const QuestionDescription = (props) => {
 												: theme.colors.gray[1],
 									},
 								})}>
-								No answers found, please add!
+								No comments found!
 							</Center>
 						)}
 					</Tabs.Panel>
 
-					<Tabs.Panel value="Answer this question" pl="xs">
+					<Tabs.Panel value="Add a new comment" pl="xs">
 						<Container pt={40} align="center" pb={80}>
-							<QuestionEditor onEdit={setAnswer} />
+							<QuestionEditor onEdit={setComment} />
 							<br />
 							<Button onClick={submitHandler}>
-								Add a new Answer to this question
+								Add a new Comment
 							</Button>
 						</Container>
 					</Tabs.Panel>
@@ -182,4 +198,4 @@ const QuestionDescription = (props) => {
 	);
 };
 
-export default QuestionDescription;
+export default AnswerPage;

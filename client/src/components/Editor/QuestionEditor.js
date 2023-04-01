@@ -5,7 +5,7 @@ const QuestionEditor = (props) => {
 	return (
 		<div>
 			<Editor
-				// apiKey="y7gnmtbsaxnjbgh3405ioqbdm24eit5f0ovek49w8yvq5r9q"
+				apiKey="13r0r9q6rug567olj00oucsijv821yet498j8h0fu8x4d0y3"
 				initialValue=""
 				init={{
 					branding: false,

@@ -110,7 +110,7 @@ export function Register(props) {
 						placeholder="FirstName LastName"
 						size="md"
 						ref={usernameRef}
-						value="R"
+						// value="R"
 						required
 					/>
 					<TextInput
@@ -118,7 +118,7 @@ export function Register(props) {
 						placeholder="hello@gmail.com"
 						size="md"
 						mt="md"
-						value="hello@gmail.com"
+						// value="hello@gmail.com"
 						ref={useremailRef}
 						required
 					/>
