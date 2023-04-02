@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Navbar } from "../../components/Navbar/Navbar";
 
@@ -9,7 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const OtherUserProfile = () => {
 	// console.log(props)
-	const userDetails = useSelector((state) => state.userDetails);
+	const [userDetails, setUserDetails] = useState({});
 	const navigate = useNavigate();
 
 	const { id } = useParams();
@@ -22,6 +22,8 @@ const OtherUserProfile = () => {
 			console.log(response.data);
 			if (response.data.length === 0) {
 				navigate("/error");
+			}else{
+				setUserDetails(response.data[0]);
 			}
 		};
 		getUserDetails();
@@ -40,12 +42,8 @@ const OtherUserProfile = () => {
 								<h1 style={{ fontSize: 28 }}>
 									<br />
 									You are viewing{" "}
-									<i>{userDetails.fullname}</i>'s profile
+									<i><u>{userDetails.fullname}</u></i>'s profile
 								</h1>
-								<p>
-									<b>Your Unique User ID: </b> &nbsp;&nbsp;{" "}
-									{userDetails._id}
-								</p>
 							</div>
 						</div>
 

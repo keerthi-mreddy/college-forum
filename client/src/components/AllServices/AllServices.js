@@ -1,32 +1,22 @@
 import {
 	createStyles,
-	Card,
 	Text,
 	SimpleGrid,
 	UnstyledButton,
-	Anchor,
-	Group,
 	rem,
+	Container,
 } from "@mantine/core";
 import {
 	IconCalendarTime,
-	IconBuildingBank,
-	IconBuildingCommunity,
 	IconTimeline,
-	IconRepeat,
-	IconReceiptRefund,
 	IconReceipt,
-	IconReceiptTax,
-	IconReport,
-	IconCashBanknote,
-	IconCoin,
 	IconQuestionMark,
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
 const mockdata = [
 	{
-		title: "Ask or browse the questions",
+		title: "Ask or browse Questions",
 		icon: IconQuestionMark,
 		color: "red",
 		link: "/questions",
@@ -43,11 +33,12 @@ const mockdata = [
 		color: "pink",
 		link: "/announcements",
 	},
-	{ title: "Receipts", icon: IconReceipt, color: "teal" },
-	{ title: "Taxes", icon: IconReceiptTax, color: "cyan" },
-	{ title: "Reports", icon: IconReport, color: "pink" },
-	{ title: "Payments", icon: IconCoin, color: "red" },
-	{ title: "Cashback", icon: IconCashBanknote, color: "orange" },
+	{
+		title: "Discussion",
+		icon: IconReceipt,
+		color: "violet",
+		link: "/discussions",
+	},
 ];
 
 const useStyles = createStyles((theme) => ({
@@ -61,6 +52,7 @@ const useStyles = createStyles((theme) => ({
 	title: {
 		fontFamily: `Greycliff CF, ${theme.fontFamily}`,
 		fontWeight: 700,
+		fontSize: 45,
 	},
 
 	item: {
@@ -70,7 +62,7 @@ const useStyles = createStyles((theme) => ({
 		justifyContent: "center",
 		textAlign: "center",
 		borderRadius: theme.radius.md,
-		height: rem(90),
+		height: rem(180),
 		backgroundColor:
 			theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
 		transition: "box-shadow 150ms ease, transform 100ms ease",
@@ -89,23 +81,25 @@ export function AllServices() {
 	const items = mockdata.map((item) => (
 		<UnstyledButton
 			key={item.title}
-			className={classes.item}
+			className={`${classes.item} ${classes.card}`}
 			onClick={() => navigate(`${item.link}`)}>
-			<item.icon color={theme.colors[item.color][6]} size="2rem" />
-			<Text size="xs" mt={7}>
+			<item.icon color={theme.colors[item.color][6]} size="3.5rem" />
+			<Text size={20} mt={7}>
 				{item.title}
 			</Text>
 		</UnstyledButton>
 	));
 
 	return (
-		<Card withBorder radius="md" className={classes.card}>
-			<Group position="apart">
+		// <Card withBorder radius="md" className={classes.card}>
+		<>
+			<Container size = '70%' align = 'center' mt={80} mb={100}>
 				<Text className={classes.title}>Services</Text>
-			</Group>
-			<SimpleGrid cols={3} mt="md">
-				{items}
-			</SimpleGrid>
-		</Card>
+				<SimpleGrid cols={2} mt="md">
+					{items}
+				</SimpleGrid>
+			</Container>
+		</>
+		// </Card>
 	);
 }

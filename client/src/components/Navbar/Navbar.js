@@ -178,12 +178,14 @@ export function Navbar() {
 							onClick={() => navigate("/")}>
 							Home
 						</div>
-						
-						<div
-							className={classes.link}
-							onClick={() => navigate("/questions")}>
-							Q & A
-						</div>
+
+						{window.location.pathname !== "/" && (
+							<div
+								className={classes.link}
+								onClick={() => navigate("/questions")}>
+								Q & A
+							</div>
+						)}
 					</Group>
 
 					{!userLoggedIn ? (
