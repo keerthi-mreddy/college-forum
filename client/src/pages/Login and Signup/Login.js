@@ -15,8 +15,6 @@ import { useNavigate } from "react-router-dom";
 import { Navbar } from "../../components/Navbar/Navbar";
 // import { Navbar } from "../../components/Navbar/Navbar";
 
-
-
 const useStyles = createStyles((theme) => ({
 	wrapper: {
 		backgroundSize: "60%",
@@ -82,7 +80,7 @@ export function Login(props) {
 	return (
 		<>
 			<div className={classes.wrapper}>
-			<Navbar />
+				<Navbar />
 				<Paper className={classes.form} radius={0} p={30}>
 					<Title
 						order={2}
@@ -97,14 +95,11 @@ export function Login(props) {
 						label="Email address"
 						placeholder="hello@gmail.com"
 						size="md"
-						value="hello@gmail.com"
 						ref={useremailRef}
 					/>
 					<PasswordInput
 						label="Password"
-						placeholder="Your password"
 						mt="md"
-						value="RBmantine@20"
 						ref={passwordRef}
 						size="md"
 					/>

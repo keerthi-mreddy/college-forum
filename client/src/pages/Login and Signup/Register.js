@@ -68,6 +68,38 @@ export function Register(props) {
 		const password = passwordRef.current.value;
 		// const gender = genderRef;
 
+		const requirements = [
+			{ re: /[0-9]/, label: "Includes number" },
+			{ re: /[a-z]/, label: "Includes lowercase letter" },
+			{ re: /[A-Z]/, label: "Includes uppercase letter" },
+			{ re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Includes special symbol" },
+		];
+
+		if(password.length < 6){
+			alert('Please make sure you include atleast 6 characters');
+			return;
+		}
+
+		if(requirements[0].re.test(password) == false){
+			alert('Should include number');
+			return;
+		}
+
+		if(requirements[1].re.test(password) == false){
+			alert('Should include lowercase letter');
+			return;
+		}
+
+		if(requirements[2].re.test(password) == false){
+			alert('Should include uppercase letter');
+			return;
+		}
+
+		if(requirements[3].re.test(password) == false){
+			alert('Should include special character');
+			return;
+		}
+
 		if (password.length === 0) {
 			alert("Enter a valid Full Name");
 			return;

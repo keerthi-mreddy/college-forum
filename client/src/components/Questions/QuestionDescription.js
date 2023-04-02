@@ -7,6 +7,7 @@ import { IconBallpen, IconMessage } from "@tabler/icons-react";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { convertDate } from "../../util/Important Functions";
 
 const QuestionDescription = (props) => {
 	const navigate = useNavigate();
@@ -42,7 +43,7 @@ const QuestionDescription = (props) => {
 					<a href={`../user/${props.questionDetails.asked_by}`}>
 						{props.questionDetails.author}
 					</a>{" "}
-					on {props.questionDetails.createdAt}{" "}
+					on {convertDate(props.questionDetails.createdAt)}{" "}
 				</Text>
 
 				<Tabs
@@ -111,7 +112,11 @@ const QuestionDescription = (props) => {
 														href={`../user/${answer.given_by}`}>
 														{answer.author}
 													</a>{" "}
-													on {answer.createdAt} <br />
+													on{" "}
+													{convertDate(
+														answer.createdAt
+													)}{" "}
+													<br />
 													<Container
 														size="100%"
 														align="center">

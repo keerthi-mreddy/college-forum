@@ -21,6 +21,7 @@ import Axios from "axios";
 import QuestionModal from "./QuestionModal";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { convertDate } from "../../util/Important Functions";
 
 const useStyles = createStyles((theme) => ({
 	wrapper: {
@@ -212,7 +213,7 @@ export default function AllQuestions() {
 												href={`user/${question.asked_by}`}>
 												{question.author}
 											</a>{" "}
-											on {question.createdAt}
+											on {convertDate(question.createdAt)}
 										</Text>
 										<Container align="center" pt="sm">
 											<Button

@@ -81,7 +81,6 @@ export function Password(props) {
 				onChange={setValue}
 				placeholder="Your password"
 				label="Password"
-				value = "RBmantine@20"
 				ref={props.customRef}
 				mt="md"
 				required

@@ -30,6 +30,7 @@ function App() {
 			email: useremail,
 			password: password,
 		});
+		console.log(det.data);
 		if (typeof det.data === "string") {
 			alert(det.data);
 			navigate("/login");
@@ -99,7 +100,7 @@ function App() {
 					!userLoggedIn ? (
 						<Login onLogin={loginHandler} />
 					) : (
-						<Navigate  to="/" />
+						<Navigate to="/" />
 					)
 				}
 				exact
@@ -121,17 +122,13 @@ function App() {
 			/>
 
 			<Route path="/questions" element={<Questions />} exact />
-			
+
 			<Route
 				path="/question/:id"
 				element={<IndividualQuestion />}
 				exact
-			/>	
-			<Route
-				path="/answer/:id"
-				element={<AnswerPage />}
-				exact
-			/>	
+			/>
+			<Route path="/answer/:id" element={<AnswerPage />} exact />
 			<Route
 				path="/college-website"
 				component={() => {

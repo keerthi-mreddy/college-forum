@@ -28,11 +28,10 @@ user_router.post("/login", async (req, res) => {
 user_router.post("/register", async (req, res) => {
 	let user = await User.findOne({
 		email: req.body.email,
-		password: req.body.password,
 	});
 	console.log(user);
 	let newUser = null;
-	if (user == null) {
+	if (user === null) {
 		// hence no user
 		// we need to save
 		console.log(req.body);

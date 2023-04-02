@@ -1,21 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { Button, Center, Container, Spoiler, Tabs, Text } from "@mantine/core";
+import React, { useEffect, useRef, useState } from "react";
+import {
+	Button,
+	Center,
+	Container,
+	Spoiler,
+	Tabs,
+	Text,
+	Textarea,
+} from "@mantine/core";
 import { Markup } from "react-render-markup";
 import { IconBallpen, IconMessage } from "@tabler/icons-react";
 
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import QuestionEditor from "../../components/Editor/QuestionEditor";
 import { Navbar } from "../../components/Navbar/Navbar";
+import { convertDate } from "../../util/Important Functions";
 
-const AnswerPage = (props) => {
-	const navigate = useNavigate();
-
+const AnswerPage = () => {
 	const [questionDetails, setQuestionDetails] = useState({});
 	const [answerDetails, setAnswerDetails] = useState({});
 	const [allComments, setAllComments] = useState([]);
-	const [comment, setComment] = useState("");
+
+	const commentRef = useRef();
 
 	const Location = useLocation();
 
@@ -40,14 +47,19 @@ const AnswerPage = (props) => {
 	const userDetails = useSelector((state) => state.userDetails);
 	// console.log(props);
 	const submitHandler = async () => {
+		const comment = commentRef.current.value;
 		console.log(comment);
+		if (comment.length == 0) {
+			alert("Please enter a valid comment");
+			return;
+		}
 		await Axios.post("http://localhost:5000/questions/new-comment", {
 			answerId: answerDetails._id,
 			author: userDetails.fullname,
 			comment: comment,
 			given_by: userDetails._id,
 		});
-		alert("Your answer has been added successfully!");
+		alert("Your comment has been added successfully!");
 		window.location.reload();
 	};
 
@@ -61,7 +73,7 @@ const AnswerPage = (props) => {
 					<a href={`../user/${questionDetails.asked_by}`}>
 						{questionDetails.author}
 					</a>{" "}
-					on {questionDetails.createdAt}{" "}
+					on {convertDate(questionDetails.createdAt)}{" "}
 				</Text>
 				<Markup markup={questionDetails.description} />
 				<Text fw={500} fz="xl" pt="sm">
@@ -104,7 +116,6 @@ const AnswerPage = (props) => {
 											<Spoiler
 												key={comment._id}
 												mt={30}
-												mb={30}
 												sx={(theme) => ({
 													backgroundColor:
 														theme.colorScheme ===
@@ -131,25 +142,25 @@ const AnswerPage = (props) => {
 												maxHeight={80}
 												showLabel="Show more"
 												hideLabel="Hide">
-												<Markup
-													markup={comment.comment}
-												/>
-												<br /> <br />
 												<div
 													style={{
 														marginBottom: 20,
 													}}>
-													<u>Commented by:</u> &nbsp;
 													<a
 														href={`../user/${comment.given_by}`}>
 														{comment.author}
 													</a>{" "}
-													on {comment.createdAt}{" "}
+													on{" "}
+													{convertDate(
+														comment.createdAt
+													)}{" "}
+													says:
 													<br />
 													<Container
 														size="100"
 														align="center"></Container>
 												</div>
+												{comment.comment}
 											</Spoiler>
 										);
 									})}
@@ -185,7 +196,15 @@ const AnswerPage = (props) => {
 
 					<Tabs.Panel value="Add a new comment" pl="xs">
 						<Container pt={40} align="center" pb={80}>
-							<QuestionEditor onEdit={setComment} />
+							{/* <QuestionEditor onEdit={setComment} /> */}
+							<Textarea
+								placeholder="New Comment"
+								label="Enter your comment below"
+								size="lg"
+								w="100%"
+								withAsterisk
+								ref={commentRef}
+							/>
 							<br />
 							<Button onClick={submitHandler}>
 								Add a new Comment
