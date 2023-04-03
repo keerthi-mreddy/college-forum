@@ -125,7 +125,7 @@ export function Register(props) {
 			year,
 			section,
 			role,
-			position
+			position,
 		});
 	};
 
@@ -176,7 +176,10 @@ export function Register(props) {
 						label="Choose whom you are registering as"
 						data={[
 							{ value: "Student", label: "Student" },
-							{ value: "Faculty", label: "Faculty & Administration" },
+							{
+								value: "Faculty",
+								label: "Faculty & Administration",
+							},
 						]}
 						required
 						value={role}
@@ -235,6 +238,8 @@ export function Register(props) {
 									{ value: "B", label: "B" },
 									{ value: "C", label: "C" },
 									{ value: "D", label: "D" },
+									{ value: "E", label: "E" },
+									{ value: "F", label: "F" },
 								]}
 								required
 								value={section}
@@ -244,24 +249,33 @@ export function Register(props) {
 						</>
 					)}
 
-					{role === 'Faculty' && 
-					<>
-						<Select
-						label="Your position"
-						data={[
-							{ value: "Assistant Professor", label: "Assistant Professor" },
-							{ value: "Professor", label: "Professor" },
-							{ value: "Associate Professor", label: "Associate Professor" },
-							{ value: "Head of Professor", label: "Head of Professor" },
-							{ value: "Dean", label: "Dean" },
-						]}
-						required
-						value={position}
-						mt="md"
-						onChange={setPosition}
-					/>
-					</>
-					}
+					{role === "Faculty" && (
+						<>
+							<Select
+								label="Your position"
+								data={[
+									{
+										value: "Assistant Professor",
+										label: "Assistant Professor",
+									},
+									{ value: "Professor", label: "Professor" },
+									{
+										value: "Associate Professor",
+										label: "Associate Professor",
+									},
+									{
+										value: "Head of Professor",
+										label: "Head of Professor",
+									},
+									{ value: "Dean", label: "Dean" },
+								]}
+								required
+								value={position}
+								mt="md"
+								onChange={setPosition}
+							/>
+						</>
+					)}
 
 					<Checkbox
 						label="You agree that you are from GRIET college?"
