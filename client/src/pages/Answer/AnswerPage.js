@@ -60,13 +60,13 @@ const AnswerPage = () => {
 		};
 		getAllComments();
 
-	}, []);
+	}, [Location.state, userDetails]);
 
 	// console.log(props);
 	const submitHandler = async () => {
 		const comment = commentRef.current.value;
 		console.log(comment);
-		if (comment.length == 0) {
+		if (comment.length === 0) {
 			alert("Please enter a valid comment");
 			return;
 		}
