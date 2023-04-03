@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import QuestionEditor from "../Editor/QuestionEditor";
-import { Button, Center, Container, Spoiler, Tabs, Text } from "@mantine/core";
+import {
+	Button,
+	Center,
+	Container,
+	Select,
+	Spoiler,
+	Tabs,
+	Text,
+} from "@mantine/core";
 import { Markup } from "react-render-markup";
-import { IconBallpen, IconMessage } from "@tabler/icons-react";
+import { IconBallpen, IconHeartFilled, IconMessage, IconNotes } from "@tabler/icons-react";
 
 import Axios from "axios";
 import { useSelector } from "react-redux";
@@ -14,7 +22,8 @@ const QuestionDescription = (props) => {
 
 	const [answer, setAnswer] = useState();
 	const userDetails = useSelector((state) => state.userDetails);
-	// console.log(props);
+	const [sortBy, setSortBy] = useState("createdAt");
+
 	const submitHandler = async () => {
 		// console.log(userDetails);
 		console.log(answer);
@@ -30,6 +39,21 @@ const QuestionDescription = (props) => {
 		});
 		alert("Your answer has been added successfully!");
 		window.location.reload();
+	};
+
+	const sortMethods = {
+		createdAt: {
+			method: (a, b) => {
+				const ad = new Date(a.createdAt);
+				const bd = new Date(b.createdAt);
+				return bd - ad;
+			},
+		},
+		upvotes: {
+			method: (a, b) => {
+				return b.upvoted_by.length - a.upvoted_by.length;
+			},
+		},
 	};
 
 	return (
@@ -63,11 +87,29 @@ const QuestionDescription = (props) => {
 							<Text size={20}>Answer this question</Text>
 						</Tabs.Tab>
 					</Tabs.List>
-
 					<Tabs.Panel value="View answers" pl="xs">
-						{props.allAnswers.length !== 0 ? (
+						{props.allAnswers.sort(sortMethods[sortBy].method)
+							.length !== 0 ? (
 							<>
 								<Container pb={80}>
+									<Select
+										mt="md"
+										withinPortal
+										data={[
+											{
+												value: "createdAt",
+												label: "Time of Creation",
+											},
+											{
+												value: "upvotes",
+												label: "Number of upvotes",
+											},
+										]}
+										placeholder="Sort by"
+										size="sm"
+										value={sortBy}
+										onChange={setSortBy}
+									/>
 									{props.allAnswers.map((answer) => {
 										return (
 											<Spoiler
@@ -100,6 +142,14 @@ const QuestionDescription = (props) => {
 												maxHeight={80}
 												showLabel="Show more"
 												hideLabel="Hide">
+												<div
+													style={{
+														float: "right",
+													}}>
+													<IconHeartFilled size={15} />
+													{answer.upvoted_by.length}
+												</div>
+												{convertDate(answer.createdAt)}
 												<Markup
 													markup={answer.answer}
 												/>

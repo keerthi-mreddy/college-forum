@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+	ActionIcon,
 	Button,
 	Center,
 	Container,
@@ -9,11 +10,16 @@ import {
 	Textarea,
 } from "@mantine/core";
 import { Markup } from "react-render-markup";
-import { IconBallpen, IconMessage } from "@tabler/icons-react";
+import {
+	IconBallpen,
+	IconHeart,
+	IconHeartFilled,
+	IconMessage,
+} from "@tabler/icons-react";
 
 import Axios from "axios";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { convertDate } from "../../util/Important Functions";
 
@@ -22,13 +28,24 @@ const AnswerPage = () => {
 	const [answerDetails, setAnswerDetails] = useState({});
 	const [allComments, setAllComments] = useState([]);
 
+	const userDetails = useSelector((state => state.userDetails));
+
+	const [liked, setLiked] = useState(false);
+
 	const commentRef = useRef();
 
 	const Location = useLocation();
 
 	useEffect(() => {
+		console.log(Location.state.answerDetails);
+		if(Location.state.answerDetails.upvoted_by.includes(userDetails._id)){
+			console.log("There")
+			setLiked(true);
+		}
 		setQuestionDetails(Location.state.questionDetails);
 		setAnswerDetails(Location.state.answerDetails);
+		
+
 		const getAllComments = async () => {
 			const response = await Axios.post(
 				"http://localhost:5000/questions/get-comments",
@@ -42,9 +59,9 @@ const AnswerPage = () => {
 			}
 		};
 		getAllComments();
+
 	}, []);
 
-	const userDetails = useSelector((state) => state.userDetails);
 	// console.log(props);
 	const submitHandler = async () => {
 		const comment = commentRef.current.value;
@@ -61,6 +78,16 @@ const AnswerPage = () => {
 		});
 		alert("Your comment has been added successfully!");
 		window.location.reload();
+	};
+
+	const likeHandler = async () => {
+		setLiked((state) => {
+			return !state;
+		});
+		await Axios.post('http://localhost:5000/questions/upvote', {
+			answerId: answerDetails._id,
+			userId: userDetails._id,
+		})
 	};
 
 	return (
@@ -85,6 +112,16 @@ const AnswerPage = () => {
 				<Container size="md">
 					<Markup markup={answerDetails.answer} />
 				</Container>
+				<>
+					<ActionIcon onClick={likeHandler}>
+						{liked ? <IconHeartFilled /> : <IconHeart />}
+					</ActionIcon>
+					{liked ? (
+						<i>You have upvoted the answer</i>
+					) : (
+						<i>Click here to upvote</i>
+					)}
+				</>
 				<Tabs
 					orientation="horizontal"
 					defaultValue="View comments"

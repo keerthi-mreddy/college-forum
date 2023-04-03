@@ -11,8 +11,9 @@ import {
 	useMantineTheme,
 	Text,
 	Button,
+	Select,
 } from "@mantine/core";
-import { IconPlus } from "@tabler/icons-react";
+import { IconNotes, IconPlus } from "@tabler/icons-react";
 import { Markup } from "react-render-markup";
 import { IconSearch, IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
@@ -93,6 +94,23 @@ const useStyles = createStyles((theme) => ({
 			width: "100%",
 		},
 	},
+	root: {
+		position: "relative",
+	},
+
+	input: {
+		height: rem(54),
+		paddingTop: rem(18),
+	},
+
+	label: {
+		position: "absolute",
+		pointerEvents: "none",
+		fontSize: theme.fontSizes.xs,
+		paddingLeft: theme.spacing.sm,
+		paddingTop: `calc(${theme.spacing.sm} / 2)`,
+		zIndex: 1,
+	},
 }));
 
 export default function AllQuestions() {
@@ -102,6 +120,7 @@ export default function AllQuestions() {
 
 	const [questions, setQuestions] = useState([]);
 	const [completeQuestions, setCompleteQuestions] = useState([]);
+	const [sortBy, setSortBy] = useState("createdAt");
 
 	const userLoggedIn = useSelector((state) => state.userLoggedIn);
 
@@ -116,12 +135,27 @@ export default function AllQuestions() {
 			);
 
 			const data = responses.data;
-			console.log(data);
+			// console.log(data);
 			setQuestions(data);
 			setCompleteQuestions(data);
 		};
 		getQuestions();
 	}, []);
+
+	const sortMethods = {
+		createdAt: {
+			method: (a, b) => {
+				const ad = new Date(a.createdAt);
+				const bd = new Date(b.createdAt);
+				return bd - ad;
+			},
+		},
+		answers: {
+			method: (a, b) => {
+				return b.answers.length - a.answers.length;
+			},
+		},
+	};
 
 	const theme = useMantineTheme();
 
@@ -171,6 +205,18 @@ export default function AllQuestions() {
 						rightSectionWidth={42}
 						onChange={onChangeHandler}
 					/>
+					<Select
+						mt="md"
+						withinPortal
+						data={[
+							{ value: "createdAt", label: "Time of Creation" },
+							{ value: "answers", label: "Number of Answers" },
+						]}
+						placeholder="Sort by"
+						size="sm"
+						value={sortBy}
+						onChange={setSortBy}
+					/>
 					<br />
 					<QuestionModal />
 				</Container>
@@ -182,15 +228,18 @@ export default function AllQuestions() {
 					chevronSize={50}
 					variant="separated"
 					disableChevronRotation
+					pb={100}
 					chevron={
-						<ThemeIcon
-							radius="xl"
-							className={classes.gradient}
-							size={32}>
-							<IconPlus size="1.05rem" stroke={1.5} />
-						</ThemeIcon>
+						<>
+							<ThemeIcon
+								radius="xl"
+								className={classes.gradient}
+								size={32}>
+								<IconPlus size="1.05rem" stroke={1.5} />
+							</ThemeIcon>
+						</>
 					}>
-					{questions.length === 0 ? (
+					{questions.sort(sortMethods[sortBy].method).length === 0 ? (
 						<Container align="center" pt="sm">
 							<i>OOPS! No questions found!</i>
 						</Container>
@@ -203,6 +252,14 @@ export default function AllQuestions() {
 									value={question._id}>
 									<Accordion.Control>
 										<Text fw={700}>{question.title}</Text>
+										<div
+											style={{
+												float: "right",
+											}}>
+											<IconNotes size={15} />
+											{question.answers.length}
+										</div>
+										{convertDate(question.createdAt)}
 									</Accordion.Control>
 									<Accordion.Panel>
 										<Markup markup={question.description} />
@@ -236,6 +293,5 @@ export default function AllQuestions() {
 				</Accordion>
 			</Container>
 		</div>
-		// </MantineProvider>
 	);
 }

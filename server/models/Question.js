@@ -24,7 +24,7 @@ const AnswerSchema = new mongoose.Schema({
 	},
 	author: String,
 	upvoted_by: {
-		type: Array,
+		type: [{ type: Schema.Types.ObjectId, ref: "users" }],
 	},
 	comments: {
 		type: [{ type: Schema.Types.ObjectId, ref: "comments" }],

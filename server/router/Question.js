@@ -89,7 +89,9 @@ question_router.post("/get-comments", async (req, res) => {
 question_router.post("/new-comment", async (req, res) => {
 	const { answerId, author, comment, given_by } = req.body;
 	const addedComment = new Comment({
-		author, comment, given_by
+		author,
+		comment,
+		given_by,
 	});
 	await addedComment.save();
 	const allComments = await Answer.find({ _id: answerId });
@@ -103,6 +105,25 @@ question_router.post("/new-comment", async (req, res) => {
 		);
 	}
 	res.json(result);
+});
+
+question_router.post("/upvote", async (req, res) => {
+	const { answerId, userId } = req.body;
+	const answers = await Answer.find({ _id: answerId });
+	// console.log(answers);
+	if (answers.length > 0) {
+		// we need to add to the userId to the upvoted by array
+		let upvotes = answers[0].upvoted_by;
+		// console.log(upvotes);
+		if (upvotes.includes(userId) == false) {
+			upvotes.push(userId);
+		} else {
+			upvotes = upvotes.filter((id) => id.toString() !== userId);
+		}
+		console.log(upvotes);
+		await Answer.updateOne({ _id: answerId }, { upvoted_by: upvotes });
+	}
+	res.json(answers);
 });
 
 module.exports = question_router;
