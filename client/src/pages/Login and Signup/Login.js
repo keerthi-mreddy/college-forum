@@ -9,8 +9,9 @@ import {
 	Text,
 	Anchor,
 	rem,
+	Select,
 } from "@mantine/core";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../../components/Navbar/Navbar";
 // import { Navbar } from "../../components/Navbar/Navbar";
@@ -49,6 +50,8 @@ export function Login(props) {
 	const useremailRef = useRef();
 	const passwordRef = useRef();
 
+	const [role, setRole] = useState("Student");
+
 	const navigate = useNavigate();
 
 	const onRegister = () => {
@@ -74,7 +77,7 @@ export function Login(props) {
 			return;
 		}
 
-		props.onLogin({ useremail, password });
+		props.onLogin({ useremail, password, role });
 	};
 
 	return (
@@ -103,6 +106,22 @@ export function Login(props) {
 						ref={passwordRef}
 						size="md"
 					/>
+
+					<Select
+						label="Choose whom you are signing in as"
+						data={[
+							{ value: "Student", label: "Student" },
+							{
+								value: "Faculty",
+								label: "Faculty & Administration",
+							},
+						]}
+						required
+						value={role}
+						mt="md"
+						onChange={setRole}
+					/>
+
 					<Checkbox label="Keep me logged in" mt="xl" size="md" />
 					<Button fullWidth mt="xl" size="md" onClick={onRegister}>
 						Login

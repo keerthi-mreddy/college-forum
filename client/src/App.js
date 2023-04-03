@@ -25,46 +25,74 @@ function App() {
 
 	const loginHandler = async (details) => {
 		// console.log(details);
-		const { useremail, password } = details;
-		const det = await axios.post("http://localhost:5000/users/login", {
-			email: useremail,
-			password: password,
-		});
+		const { useremail, password, role } = details;
+		let det;
+		if (role === "Faculty") {
+			det = await axios.post("http://localhost:5000/faculty/login", {
+				useremail,
+				password,
+			});
+		} else {
+			det = await axios.post("http://localhost:5000/users/login", {
+				email: useremail,
+				password: password,
+			});
+		}
 		console.log(det.data);
 		if (typeof det.data === "string") {
 			alert(det.data);
 			navigate("/login");
 		} else {
 			console.log(det.data);
-			localStorage.setItem("id", det.data._id);
+			localStorage.setItem("id", `${role} ${det.data._id}`);
 			dispatcher({ type: "login", value: det.data });
 			// console.log(userDetails);
 			navigate("/");
 		}
+
 		return true;
 	};
 
 	const registerHandler = async (details) => {
 		console.log(details);
-		const { username, useremail, password, gender, branch, year, section } =
-			details;
-		const det = await axios.post("http://localhost:5000/users/register", {
-			email: useremail,
-			password: password,
-			fullname: username,
-			gender: gender,
-			branch: branch,
-			year: year,
-			section: section,
-		});
+		const {
+			username,
+			useremail,
+			password,
+			gender,
+			branch,
+			year,
+			section,
+			role,
+			position,
+		} = details;
+		let det;
+		if (role === "Faculty") {
+			det = await axios.post("http://localhost:5000/faculty/register", {
+				username,
+				useremail,
+				password,
+				gender,
+				position,
+			});
+		} else {
+			det = await axios.post("http://localhost:5000/users/register", {
+				email: useremail,
+				password: password,
+				fullname: username,
+				gender: gender,
+				branch: branch,
+				year: year,
+				section: section,
+			});
+		}
 		if (typeof det.data === "string") {
 			alert(det.data);
 			navigate("/login");
 		} else {
-			localStorage.setItem("id", det.data._id);
-			// console.log(det.data);
+			console.log(det);
+			localStorage.setItem("id", `${role} ${det.data._id}`);
 			dispatcher({ type: "login", value: det.data });
-			// console.log(userDetails);
 			navigate("/");
 		}
 		return true;
@@ -82,9 +110,18 @@ function App() {
 			if (id !== undefined && id !== null) {
 				// some id exisits
 				// console.log("in");
-				const det = await axios.get(
-					`http://localhost:5000/users/${id}`
-				);
+				const words = id.split(" ");
+				console.log(words);
+				let det;
+				if (words[0] === "Student") {
+					det = await axios.get(
+						`http://localhost:5000/users/${words[1]}`
+					);
+				} else {
+					det = await axios.get(
+						`http://localhost:5000/faculty/${words[1]}`
+					);
+				}
 				dispatcher({ type: "login", value: det.data[0] });
 			}
 		};

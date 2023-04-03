@@ -16,6 +16,7 @@ const UserProfile = (props) => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
+		console.log(userDetails.position);
 		if (!userLoggedIn) {
 			navigate("/login");
 		}
@@ -63,26 +64,46 @@ const UserProfile = (props) => {
 											{userDetails.fullname}
 										</td>
 									</tr>
-									<tr>
-										<th className="th-m">
-											Branch of Engineering
-										</th>
-										<td className="td-m">
-											{userDetails.branch}
-										</td>
-									</tr>
-									<tr>
-										<th className="th-m">Year of Study</th>
-										<td className="td-m">
-											{userDetails.year}
-										</td>
-									</tr>
-									<tr>
-										<th className="th-m">Section</th>
-										<td className="td-m">
-											{userDetails.section}
-										</td>
-									</tr>
+
+									{userDetails.position === undefined ? (
+										<>
+											<tr>
+												<th className="th-m">
+													Branch of Engineering
+												</th>
+												<td className="td-m">
+													{userDetails.branch}
+												</td>
+											</tr>
+											<tr>
+												<th className="th-m">
+													Year of Study
+												</th>
+												<td className="td-m">
+													{userDetails.year}
+												</td>
+											</tr>
+											<tr>
+												<th className="th-m">
+													Section
+												</th>
+												<td className="td-m">
+													{userDetails.section}
+												</td>
+											</tr>
+										</>
+									) : (
+										<>
+											<tr>
+												<th className="th-m">
+													Position
+												</th>
+												<td className="td-m">
+													{userDetails.position}
+												</td>
+											</tr>
+										</>
+									)}
 								</table>
 								<div style={{ textAlign: "center" }}>
 									<br />

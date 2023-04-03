@@ -7,6 +7,7 @@ const Question = require("./models/Question");
 let cors = require("cors");
 const user_router = require("./router/User");
 const question_router = require("./router/Question");
+const faculty_router = require("./router/Faculty");
 
 const MongoURL =
 	"mongodb+srv://CollegeForumUser:CollegeForumUserPassword@college-forum-database.1ff6zxs.mongodb.net/?retryWrites=true&w=majority";
@@ -31,6 +32,7 @@ app.use(cors());
 // routes
 app.use("/users", user_router);
 app.use("/questions", question_router);
+app.use('/faculty', faculty_router);
 
 // start server
 const PORT = 5000;

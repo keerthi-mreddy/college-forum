@@ -2,7 +2,6 @@ import {
 	Paper,
 	createStyles,
 	TextInput,
-	PasswordInput,
 	Checkbox,
 	Button,
 	Title,
@@ -55,7 +54,8 @@ export function Register(props) {
 	const [branch, setBranch] = useState("CSE");
 	const [section, setSection] = useState("A");
 	const [year, setYear] = useState("1");
-
+	const [role, setRole] = useState("Student");
+	const [position, setPosition] = useState("Assistant Professor");
 	const navigate = useNavigate();
 
 	const onRegister = () => {
@@ -72,31 +72,34 @@ export function Register(props) {
 			{ re: /[0-9]/, label: "Includes number" },
 			{ re: /[a-z]/, label: "Includes lowercase letter" },
 			{ re: /[A-Z]/, label: "Includes uppercase letter" },
-			{ re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Includes special symbol" },
+			{
+				re: /[$&+,:;=?@#|'<>.^*()%!-]/,
+				label: "Includes special symbol",
+			},
 		];
 
-		if(password.length < 6){
-			alert('Please make sure you include atleast 6 characters');
+		if (password.length < 6) {
+			alert("Please make sure you include atleast 6 characters");
 			return;
 		}
 
-		if(requirements[0].re.test(password) == false){
-			alert('Should include number');
+		if (requirements[0].re.test(password) == false) {
+			alert("Should include number");
 			return;
 		}
 
-		if(requirements[1].re.test(password) == false){
-			alert('Should include lowercase letter');
+		if (requirements[1].re.test(password) == false) {
+			alert("Should include lowercase letter");
 			return;
 		}
 
-		if(requirements[2].re.test(password) == false){
-			alert('Should include uppercase letter');
+		if (requirements[2].re.test(password) == false) {
+			alert("Should include uppercase letter");
 			return;
 		}
 
-		if(requirements[3].re.test(password) == false){
-			alert('Should include special character');
+		if (requirements[3].re.test(password) == false) {
+			alert("Should include special character");
 			return;
 		}
 
@@ -121,6 +124,8 @@ export function Register(props) {
 			branch,
 			year,
 			section,
+			role,
+			position
 		});
 	};
 
@@ -168,52 +173,96 @@ export function Register(props) {
 						onChange={setGender}
 					/>
 					<Select
-						label="Choose your year of study"
+						label="Choose whom you are registering as"
 						data={[
-							{ value: "1", label: "1" },
-							{ value: "2", label: "2" },
-							{ value: "3", label: "3" },
-							{ value: "4", label: "4" },
-							{ value: "Passed Out", label: "Passed Out" },
+							{ value: "Student", label: "Student" },
+							{ value: "Faculty", label: "Faculty & Administration" },
 						]}
 						required
-						value={year}
+						value={role}
 						mt="md"
-						onChange={setYear}
+						onChange={setRole}
 					/>
-					<Select
-						label="Choose your Branch"
+					{role === "Student" && (
+						<>
+							<Select
+								label="Choose your year of study"
+								data={[
+									{ value: "1", label: "1" },
+									{ value: "2", label: "2" },
+									{ value: "3", label: "3" },
+									{ value: "4", label: "4" },
+									{
+										value: "Passed Out",
+										label: "Passed Out",
+									},
+								]}
+								required
+								value={year}
+								mt="md"
+								onChange={setYear}
+							/>
+							<Select
+								label="Choose your Branch"
+								data={[
+									{
+										value: "CSE",
+										label: "Computer Science and Engineering (CSE)",
+									},
+									{
+										value: "ECE",
+										label: "Electronics and Communication Engineering (ECE)",
+									},
+									{
+										value: "ME",
+										label: "Mechanical Engineering",
+									},
+									{ value: "CE", label: "Civil Engineering" },
+									{
+										value: "EEE",
+										label: "Electrical Engineering",
+									},
+								]}
+								required
+								value={branch}
+								mt="md"
+								onChange={setBranch}
+							/>
+							<Select
+								label="Choose your section"
+								data={[
+									{ value: "A", label: "A" },
+									{ value: "B", label: "B" },
+									{ value: "C", label: "C" },
+									{ value: "D", label: "D" },
+								]}
+								required
+								value={section}
+								mt="md"
+								onChange={setSection}
+							/>
+						</>
+					)}
+
+					{role === 'Faculty' && 
+					<>
+						<Select
+						label="Your position"
 						data={[
-							{
-								value: "CSE",
-								label: "Computer Science and Engineering (CSE)",
-							},
-							{
-								value: "ECE",
-								label: "Electronics and Communication Engineering (ECE)",
-							},
-							{ value: "ME", label: "Mechanical Engineering" },
-							{ value: "CE", label: "Civil Engineering" },
-							{ value: "EEE", label: "Electrical Engineering" },
+							{ value: "Assistant Professor", label: "Assistant Professor" },
+							{ value: "Professor", label: "Professor" },
+							{ value: "Associate Professor", label: "Associate Professor" },
+							{ value: "Head of Professor", label: "Head of Professor" },
+							{ value: "Dean", label: "Dean" },
 						]}
 						required
-						value={branch}
+						value={position}
 						mt="md"
-						onChange={setBranch}
+						onChange={setPosition}
 					/>
-					<Select
-						label="Choose your section"
-						data={[
-							{ value: "A", label: "A" },
-							{ value: "B", label: "B" },
-							{ value: "C", label: "C" },
-							{ value: "D", label: "D" },
-						]}
-						required
-						value={section}
-						mt="md"
-						onChange={setSection}
-					/>
+					</>
+					}
+
 					<Checkbox
 						label="You agree that you are from GRIET college?"
 						mt="xl"

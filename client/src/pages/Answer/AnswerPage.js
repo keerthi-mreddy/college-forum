@@ -4,6 +4,7 @@ import {
 	Button,
 	Center,
 	Container,
+	Group,
 	Spoiler,
 	Tabs,
 	Text,
@@ -27,8 +28,9 @@ const AnswerPage = () => {
 	const [questionDetails, setQuestionDetails] = useState({});
 	const [answerDetails, setAnswerDetails] = useState({});
 	const [allComments, setAllComments] = useState([]);
+	const [upvotes, setUpvotes] = useState(0);
 
-	const userDetails = useSelector((state => state.userDetails));
+	const userDetails = useSelector((state) => state.userDetails);
 
 	const [liked, setLiked] = useState(false);
 
@@ -37,15 +39,7 @@ const AnswerPage = () => {
 	const Location = useLocation();
 
 	useEffect(() => {
-		console.log(Location.state.answerDetails);
-		if(Location.state.answerDetails.upvoted_by.includes(userDetails._id)){
-			console.log("There")
-			setLiked(true);
-		}
 		setQuestionDetails(Location.state.questionDetails);
-		setAnswerDetails(Location.state.answerDetails);
-		
-
 		const getAllComments = async () => {
 			const response = await Axios.post(
 				"http://localhost:5000/questions/get-comments",
@@ -55,12 +49,16 @@ const AnswerPage = () => {
 			);
 			console.log(response.data);
 			if (response.data.length > 0) {
+				if (response.data[0].upvoted_by.includes(userDetails._id)) {
+					setLiked(true);
+				}
+				setAnswerDetails(response.data[0]);
 				setAllComments(response.data[0].comments);
+				setUpvotes(response.data[0].upvoted_by.length);
 			}
 		};
 		getAllComments();
-
-	}, [Location.state, userDetails]);
+	}, [Location.state, userDetails, setLiked]);
 
 	// console.log(props);
 	const submitHandler = async () => {
@@ -84,10 +82,20 @@ const AnswerPage = () => {
 		setLiked((state) => {
 			return !state;
 		});
-		await Axios.post('http://localhost:5000/questions/upvote', {
+		if (liked === false) {
+			setUpvotes((prev) => {
+				return prev++;
+			});
+		} else {
+			setUpvotes((prev) => {
+				return prev--;
+			});
+		}
+		await Axios.post("http://localhost:5000/questions/upvote", {
 			answerId: answerDetails._id,
 			userId: userDetails._id,
-		})
+		});
+		window.location.reload();
 	};
 
 	return (
@@ -107,15 +115,18 @@ const AnswerPage = () => {
 					<a href={`../user/${questionDetails.asked_by}`}>
 						{questionDetails.author}
 					</a>{" "}
-					have answered saying:
+					has answered saying:
 				</Text>
 				<Container size="md">
 					<Markup markup={answerDetails.answer} />
 				</Container>
 				<>
-					<ActionIcon onClick={likeHandler}>
-						{liked ? <IconHeartFilled /> : <IconHeart />}
-					</ActionIcon>
+					<Group align="left" display="flex">
+						<ActionIcon onClick={likeHandler} color="red">
+							{liked ? <IconHeartFilled /> : <IconHeart />}
+						</ActionIcon>
+						<Text>{upvotes}</Text>
+					</Group>
 					{liked ? (
 						<i>You have upvoted the answer</i>
 					) : (
