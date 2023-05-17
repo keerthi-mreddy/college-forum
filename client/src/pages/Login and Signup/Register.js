@@ -50,6 +50,7 @@ export function Register(props) {
 	const usernameRef = useRef();
 	const useremailRef = useRef();
 	const passwordRef = useRef();
+	const rollNumberRef = useRef();
 	const [gender, setGender] = useState("Male");
 	const [branch, setBranch] = useState("CSE");
 	const [section, setSection] = useState("A");
@@ -65,6 +66,7 @@ export function Register(props) {
 		console.log(passwordRef);
 		const username = usernameRef.current.value;
 		const useremail = useremailRef.current.value;
+		const rollNumber = rollNumberRef.current.value;
 		const password = passwordRef.current.value;
 		// const gender = genderRef;
 
@@ -119,6 +121,7 @@ export function Register(props) {
 		props.onLogin({
 			username,
 			useremail,
+			rollNumber,
 			password,
 			gender,
 			branch,
@@ -157,6 +160,15 @@ export function Register(props) {
 						mt="md"
 						// value="hello@gmail.com"
 						ref={useremailRef}
+						required
+					/>
+					<TextInput
+						label="Roll Number"
+						placeholder="20241A05xx"
+						size="md"
+						mt="md"
+						// value="hello@gmail.com"
+						ref={rollNumberRef}
 						required
 					/>
 					<Password customRef={passwordRef} />

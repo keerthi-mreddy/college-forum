@@ -16,7 +16,7 @@ const UserProfile = (props) => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		console.log(userDetails.position);
+		console.log(userDetails);
 		if (!userLoggedIn) {
 			navigate("/login");
 		}
@@ -89,6 +89,29 @@ const UserProfile = (props) => {
 												</th>
 												<td className="td-m">
 													{userDetails.section}
+												</td>
+											</tr>
+											<tr>
+												<th className="th-m">
+													Verification Status
+												</th>
+												<td className="td-m">
+													{userDetails.verification_status ===
+													false ? (
+														<span
+															style={{
+																color: "red",
+															}}>
+															Not Verified
+														</span>
+													) : (
+														<span
+															style={{
+																color: "green",
+															}}>
+															Verified
+														</span>
+													)}
 												</td>
 											</tr>
 										</>

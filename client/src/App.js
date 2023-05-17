@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import OtherUserProfile from "./pages/User Profile/OtherUserProfile";
 import IndividualQuestion from "./pages/Questions/IndividualQuestion";
 import AnswerPage from "./pages/Answer/AnswerPage";
+import UserStatus from "./pages/User Profile/UserStatus";
 
 function App() {
 	const dispatcher = useDispatch();
@@ -58,6 +59,7 @@ function App() {
 		const {
 			username,
 			useremail,
+			rollNumber,
 			password,
 			gender,
 			branch,
@@ -80,6 +82,7 @@ function App() {
 				email: useremail,
 				password: password,
 				fullname: username,
+				rollNumber: rollNumber,
 				gender: gender,
 				branch: branch,
 				year: year,
@@ -174,6 +177,7 @@ function App() {
 				}}
 			/>
 			<Route path="/announcements" element={<Announcement />} />
+			<Route path="/user-status" element={<UserStatus />} />
 			<Route path="/timetable" element={<Timetable />} />
 			<Route path="/demo" element={<Demo />} />
 			<Route path="*" element={<Error />} exact />

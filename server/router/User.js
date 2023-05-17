@@ -38,6 +38,7 @@ user_router.post("/register", async (req, res) => {
 		newUser = await User.create({
 			fullname: req.body.fullname,
 			gender: req.body.gender,
+			rollNumber: req.body.rollNumber,
 			email: req.body.email,
 			year: req.body.year,
 			branch: req.body.branch,
@@ -70,6 +71,21 @@ user_router.put("/:id", async (req, res) => {
 user_router.delete("/:id", async (req, res) => {
 	await User.findByIdAndDelete(req.params.id);
 	res.json({ message: "User deleted successfully" });
+});
+
+user_router.post("/verified", async (req, res) => {
+	const { roll_number } = req.body;
+	console.log(roll_number);
+	// find by roll_number and update status to verified
+	const user = await User.find({ rollNumber: roll_number });
+	if (user.length !== 0) {
+		await User.findOneAndUpdate(
+			{ rollNumber: roll_number },
+			{ verification_status: true }
+		);
+	}
+	console.log('Verification Done for Roll Number: ' + roll_number);
+	res.send('OK');
 });
 
 module.exports = user_router;

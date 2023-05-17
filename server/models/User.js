@@ -31,6 +31,14 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	rollNumber: {
+		type: String,
+		required: true,
+	},
+	verification_status: {
+		type: Boolean,
+		default: false,
+	},
 	createdAt: {
 		type: Date,
 		default: Date.now,
