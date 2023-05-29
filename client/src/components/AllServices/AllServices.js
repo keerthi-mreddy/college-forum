@@ -34,10 +34,10 @@ const mockdata = [
 		link: "/announcements",
 	},
 	{
-		title: "Discussion",
+		title: "Remarks",
 		icon: IconReceipt,
 		color: "violet",
-		link: "/discussions",
+		link: "/remarks",
 	},
 ];
 

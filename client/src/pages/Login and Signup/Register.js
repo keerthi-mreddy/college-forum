@@ -163,7 +163,7 @@ export function Register(props) {
 						required
 					/>
 					<TextInput
-						label="Roll Number"
+						label="Roll Number / Faculty ID Number"
 						placeholder="20241A05xx"
 						size="md"
 						mt="md"

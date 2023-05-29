@@ -93,6 +93,14 @@ const UserProfile = (props) => {
 											</tr>
 											<tr>
 												<th className="th-m">
+													Roll Number
+												</th>
+												<td className="td-m">
+													{userDetails.rollNumber}
+												</td>
+											</tr>
+											<tr>
+												<th className="th-m">
 													Verification Status
 												</th>
 												<td className="td-m">

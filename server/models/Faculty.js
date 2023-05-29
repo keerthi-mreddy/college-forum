@@ -19,6 +19,10 @@ const facultySchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	facultyID: {
+		type: String,
+		required: true
+	},
 	password: {
 		type: String,
 		required: true,

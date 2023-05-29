@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Homepage from "./pages/Home Page/Homepage";
 import UserProfile from "./pages/User Profile/UserProfile";
 import Announcement from "./pages/Announcements/Announcements";
-import Demo from "./pages/Demo";
+import Demo from "./pages/Demo.js";
 import Questions from "./pages/Questions/Questions";
 import Timetable from "./pages/Timetable/Timetable";
 import { useEffect } from "react";
@@ -16,11 +16,14 @@ import OtherUserProfile from "./pages/User Profile/OtherUserProfile";
 import IndividualQuestion from "./pages/Questions/IndividualQuestion";
 import AnswerPage from "./pages/Answer/AnswerPage";
 import UserStatus from "./pages/User Profile/UserStatus";
+import Remarks from "./pages/Remarks/Remarks";
+import FacultyRemarks from "./pages/Remarks/FacultyRemarks";
 
 function App() {
 	const dispatcher = useDispatch();
 
 	const userLoggedIn = useSelector((state) => state.userLoggedIn);
+	const userDetails = useSelector((state) => state.userDetails);
 
 	const navigate = useNavigate();
 
@@ -76,6 +79,7 @@ function App() {
 				password,
 				gender,
 				position,
+				facultyID: rollNumber,
 			});
 		} else {
 			det = await axios.post("http://localhost:5000/users/register", {
@@ -179,6 +183,10 @@ function App() {
 			<Route path="/announcements" element={<Announcement />} />
 			<Route path="/user-status" element={<UserStatus />} />
 			<Route path="/timetable" element={<Timetable />} />
+			<Route
+				path="/remarks"
+				element={!userDetails.position ? <Remarks /> : <FacultyRemarks />}
+			/>
 			<Route path="/demo" element={<Demo />} />
 			<Route path="*" element={<Error />} exact />
 		</Routes>

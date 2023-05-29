@@ -3,7 +3,7 @@ const Faculty = require("../models/Faculty");
 const faculty_router = require("express").Router();
 
 faculty_router.post("/register", async (req, res) => {
-	const { username, useremail, password, gender, position } = req.body;
+	const { username, useremail, password, gender, position, facultyID } = req.body;
 	console.log(req.body);
 	let faculty = await Faculty.findOne({
 		email: useremail,
@@ -16,6 +16,7 @@ faculty_router.post("/register", async (req, res) => {
 			email: useremail,
 			password: password,
 			position: position,
+			facultyID: facultyID
 		});
 		await newFaculty.save();
 		console.log(newFaculty);
@@ -44,5 +45,11 @@ faculty_router.get("/:id", async (req, res) => {
 	const response = await Faculty.find({ _id: req.params.id });
 	res.json(response);
 });
+
+faculty_router.get('/', async (req, res) => {
+	const response = await Faculty.find();
+	// console.log(response);
+	res.json(response);
+})
 
 module.exports = faculty_router;
