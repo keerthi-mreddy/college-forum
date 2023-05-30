@@ -8,7 +8,11 @@ const Questions = () => {
 	const userDetails = useSelector((state) => state.userDetails);
 	const navigate = useNavigate();
 	useEffect(() => {
-		if (!userDetails.verification_status) {
+		// console.log(userDetails.verification_status);
+		if (
+			userDetails.verification_status !== undefined &&
+			!userDetails.verification_status
+		) {
 			alert("To access questions you must verify your user status!");
 			navigate("/");
 		}
