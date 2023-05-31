@@ -21,7 +21,8 @@ class UploadFileForm(FlaskForm):
 @app.route('/', methods=['GET', 'POST'])
 def home():
     roll_number = request.args.get('rollNumber')
-    print(roll_number)
+    role = request.args.get('role')
+    print(roll_number, type)
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data  # First grab the file
@@ -30,7 +31,11 @@ def home():
         if(check(roll_number) == True):
             flash("you are successfully logged in")
             json_obj = {'roll_number': roll_number}
-            res = requests.post('http://localhost:5000/users/verified/',
+            if(role == 'user'):
+                res = requests.post('http://localhost:5000/users/verified/',
+                          json=json_obj)
+            else:
+                res = requests.post('http://localhost:5000/faculty/verified/',
                           json=json_obj)
             if(res.status_code == 200):
                 return redirect('http://localhost:3000/')

@@ -52,4 +52,20 @@ faculty_router.get('/', async (req, res) => {
 	res.json(response);
 })
 
+faculty_router.post("/verified", async (req, res) => {
+	const { roll_number } = req.body;
+	// console.log(roll_number);
+	// find by roll_number and update status to verified
+	const user = await Faculty.find({ facultyID: roll_number });
+	console.log(user)
+	if (user.length !== 0) {
+		await Faculty.findOneAndUpdate(
+			{ facultyID: roll_number },
+			{ verification_status: true }
+		);
+		console.log('Verification Done for Roll Number: ' + roll_number);
+		res.send('OK');
+	}
+});
+
 module.exports = faculty_router;

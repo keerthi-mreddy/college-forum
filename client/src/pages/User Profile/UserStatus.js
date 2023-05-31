@@ -109,6 +109,7 @@ export default function UserStatus() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
+		console.log(userDetails.facultyID);
 		if (!userLoggedIn) {
 			navigate("/login");
 		}
@@ -117,9 +118,15 @@ export default function UserStatus() {
 	const { classes } = useStyles();
 
 	const verfiyHandler = () => {
-		window.location.replace(
-			`http://localhost:8080/?rollNumber=${userDetails.rollNumber}`
-		);
+		if (userDetails.facultyID !== undefined) {
+			window.location.replace(
+				`http://localhost:8080/?rollNumber=${userDetails.facultyID}&role=faculty`
+			);
+		} else {
+			window.location.replace(
+				`http://localhost:8080/?rollNumber=${userDetails.rollNumber}&role=user`
+			);
+		}
 	};
 
 	return (

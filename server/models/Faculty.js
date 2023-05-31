@@ -35,6 +35,10 @@ const facultySchema = new mongoose.Schema({
 		type: Date,
 		default: Date.now,
 	},
+	verification_status: {
+		type: Boolean,
+		default: false
+	}
 });
 
 // create user model
